@@ -21,7 +21,7 @@ const CustomerLogin = () => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:4000/login', { // replace PORT with actual backend port
+      const res = await fetch('http://localhost:4000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,6 +33,12 @@ const CustomerLogin = () => {
 
       if (res.ok) {
         console.log('Login Success:', data.customer);
+        // After successful login response from server:
+        const customerId =data.customer.customer_id; // example
+
+        // Save to localStorage as a string
+        localStorage.setItem("customerId", customerId);
+
         navigate('/');
       } else {
         setError(data.message || 'Login failed');

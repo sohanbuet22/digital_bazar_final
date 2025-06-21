@@ -1,0 +1,26 @@
+.product-details-container {
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.details-img {
+  width: 350px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.details-info {
+  max-width: 600px;
+}
+
+.add-to-cart-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
