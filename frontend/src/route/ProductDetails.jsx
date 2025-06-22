@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../css/productDetails.css"; // create this if you want styles
+import "../css/productDetails.css"; 
 
 const ProductDetails = () => {
-    const { id } = useParams(); // gets product_id from URL
+    const { id } = useParams(); 
     const [product, setProduct] = useState(null);
     const customerId = localStorage.getItem("customerId");
 

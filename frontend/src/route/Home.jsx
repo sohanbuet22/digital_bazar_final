@@ -11,7 +11,7 @@ const HomePage = () => {
   const [startIndex, setStartIndex] = useState(0);
   const visibleCount = 5;
 
-  // 🔄 Fetch products from database
+ 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -25,7 +25,6 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  // ✅ Get visible products with safe slice (no duplicate)
   const getVisibleProducts = () => {
     return allProducts.slice(startIndex, startIndex + visibleCount);
   };
