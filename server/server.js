@@ -2,13 +2,22 @@ const express = require("express");
 const cors = require("cors");
 require('dotenv').config();
 const app = express();
-
+const jwt = require("jsonwebtoken");
 
 const db = require("./db");
 const { message } = require("statuses");
+const  isAuthenticated  = require("./middleware/isAuthenticated");
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000", 
+  credentials: true
+}));
+
 app.use(express.json());
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 
 
 
@@ -21,12 +30,30 @@ app.post("/login", async (req, res) => {
       [email, password]
     );
 
-    if (result.rows.length > 0) {
-      res.status(200).json({ customer: result.rows[0] });
-      console.log("Login successful:", result.rows[0].customer_id);
-    } else {
-      res.status(401).json({ message: "Invalid email or password" });
+    // if (result.rows.length > 0) {
+    //   res.status(200).json({ customer: result.rows[0] });
+    //   console.log("Login successful:", result.rows[0].customer_id);
+    // } else {
+    if(result.rows.length<=0){
+     return res.status(401).json({ message: "Invalid email or password" });
     }
+    const tokenData={
+      customer_id:result.rows[0].customer_id
+    };
+
+    const token=await jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn:'1d'});
+
+     return res
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",  
+        maxAge: 24 * 60 * 60 * 1000  
+      })
+      .status(200)
+      .json({
+        customer: result.rows[0]
+      });
+
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
@@ -87,9 +114,9 @@ app.get("/api/v1/products/:id", async (req, res) => {
 });
 
 
-app.get("/cartItems/:id", async (req, res) => {
+app.get("/cartItems",isAuthenticated, async (req, res) => {
   try {
-    const customer_id = req.params.id;
+    const customer_id = req.customer_id;
     console.log(customer_id);
     const cartResult = await db.query(
       "select cart_id from customer where customer_id=$1",
@@ -115,8 +142,9 @@ app.get("/cartItems/:id", async (req, res) => {
 });
 
 
-app.post("/add_to_cart", async (req, res) => {
-  const { product_id, customer_id } = req.body;
+app.post("/add_to_cart", isAuthenticated,async (req, res) => {
+  const { product_id } = req.body;
+  const customer_id=req.customer_id;
   console.log(customer_id);
   try {
     const cartResult = await db.query(
@@ -142,7 +170,6 @@ app.post("/add_to_cart", async (req, res) => {
 
 app.get("/api/v1/paymentMethods", async (req, res) => {
   try {
-
     const results = await db.query(
       "select payment_method from payment_method"
     );

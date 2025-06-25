@@ -6,12 +6,13 @@ import "../css/productDetails.css";
 const ProductDetails = () => {
     const { id } = useParams(); 
     const [product, setProduct] = useState(null);
-    const customerId = localStorage.getItem("customerId");
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await axios.get(`http://localhost:4000/api/v1/products/${id}`);
+                const res = await axios.get(`http://localhost:4000/api/v1/products/${id}`, {
+                    withCredentials: true, // Send cookies (JWT)
+                });
                 setProduct(res.data.product);
             } catch (err) {
                 console.error("Error fetching product:", err);
@@ -20,26 +21,23 @@ const ProductDetails = () => {
         fetchProduct();
     }, [id]);
 
-    const handleAddToCart = async (productId) => {
-        if (!customerId) {
-            alert("Please login first!");
-            return;
-        }
-
+    const handleAddToCart = async () => {
         try {
-            console.log(id);
-            console.log(customerId);
-            await axios.post("http://localhost:4000/add_to_cart", {
-                product_id: id,
-                customer_id: customerId,
-            });
+            await axios.post(
+                "http://localhost:4000/add_to_cart",
+                { product_id: id },
+                { withCredentials: true } // Send cookies (JWT)
+            );
             alert("Added to cart!");
         } catch (error) {
-            console.error(error);
-            alert("Failed to add to cart");
+            console.error("Error adding to cart:", error);
+            if (error.response && error.response.status === 401) {
+                alert("Please login first!");
+            } else {
+                alert("Failed to add to cart");
+            }
         }
     };
-
 
     if (!product) return <div>Loading...</div>;
 
