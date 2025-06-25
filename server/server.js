@@ -60,6 +60,21 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,      
+    sameSite: "lax",   
+  });
+  res.json({ message: "Logged out successfully" });
+});
+
+app.get("/isAuthenticate", isAuthenticated, async (req, res) => {
+
+  res.json({ message: "You are logged in", customer_id: req.customer_id });
+});
+
+
+
 
 app.post("/register", async (req, res) => {
   try {
@@ -142,7 +157,7 @@ app.get("/cartItems",isAuthenticated, async (req, res) => {
 });
 
 
-app.post("/add_to_cart", isAuthenticated,async (req, res) => {
+app.post("/add_to_cart",isAuthenticated, async (req, res) => {
   const { product_id } = req.body;
   const customer_id=req.customer_id;
   console.log(customer_id);

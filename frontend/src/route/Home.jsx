@@ -9,15 +9,40 @@ const HomePage = () => {
 
   const [allProducts, setAllProducts] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const visibleCount = 5;
 
- 
+  // ✅ Check login status on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get("http://localhost:4000/isAuthenticate", {
+          withCredentials: true,
+        });
+        setIsLoggedIn(true);
+      } catch (err) {
+        setIsLoggedIn(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  // ✅ Logout function
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:4000/logout", {}, { withCredentials: true });
+      setIsLoggedIn(false);
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("http://localhost:4000/api/v1/products");
         setAllProducts(res.data.products);
-        console.log(res.data.products);
       } catch (err) {
         console.error("Failed to fetch products:", err);
       }
@@ -69,14 +94,25 @@ const HomePage = () => {
 
         <div className="nav-actions">
           <input type="text" placeholder="Search..." className="search-input" />
-          <li className="nav-item login-item">
-            Login
-            <ul className="login-dropdown">
-              <li className="login-option" onClick={() => navigate('/CustomerLogin')}>Customer</li>
-              <li className="login-option">Seller</li>
-              <li className="login-option">Delivery Man</li>
-            </ul>
-          </li>
+          {!isLoggedIn ? (
+            <li className="nav-item login-item">
+              Login
+              <ul className="login-dropdown">
+                <li className="login-option" onClick={() => navigate('/CustomerLogin')}>Customer</li>
+                <li className="login-option">Seller</li>
+                <li className="login-option">Delivery Man</li>
+              </ul>
+            </li>
+          ) : (
+            <li className="nav-item login-item">
+              Account
+              <ul className="login-dropdown">
+                <li className="login-option" onClick={() => navigate('/profile')}>Profile</li>
+                <li className="login-option" onClick={handleLogout}>Logout</li>
+              </ul>
+            </li>
+          )}
+
           <span
             className="nav-action-item"
             style={{ cursor: "pointer" }}
