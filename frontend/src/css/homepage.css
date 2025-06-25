@@ -1,74 +1,148 @@
-* {
+/* Existing styles (keeping your original styles) */
+.container {
+  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #415886;  /* light warm gray background for the page */
-}
-
-.container {
-  background-color: rgb(197, 190, 190);  /* clean white content area */
+  background-color: #f8f9fa;
   min-height: 100vh;
-  padding: 3rem;
-  box-shadow: 0 0 15px rgba(0,0,0,0.05);
-  border-radius: 10px;
-  max-width: auto;
-  
 }
 
+/* Header Styles */
 .websiteHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #3b82f6; /* soft vivid blue */
-  padding: 1rem 2rem;
-  height: 5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .iconImage {
   width: 50px;
   height: 50px;
-  margin-right: 12px;
+  margin-right: 15px;
+  border-radius: 8px;
 }
 
 #websiteName {
-  font-size: 2.5rem;
-  color: #ffffff;  /* white text on blue */
+  font-size: 2rem;
   font-weight: bold;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
 }
 
+/* Navbar Styles */
+/* Navbar Styles */
 .navbar {
-  background-color: #60a5fa; /* lighter blue navbar */
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
+  background-color: #2c3e50;
+  padding: 0 2rem;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-list {
-  list-style: none;
   display: flex;
-  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
 }
 
 .nav-item {
-  color: #1e293b;  /* dark text for better contrast */
-  font-weight: 500;
+  color: white;
+  padding: 1rem 1.5rem; /* This padding increases the clickable/hoverable area */
   cursor: pointer;
-  transition: color 0.3s, transform 0.2s;
+  transition: background-color 0.3s ease;
+  position: relative; /* Essential for positioning the absolute dropdown */
+  /* Added to ensure the whole padding area is hoverable and visible */
+  height: auto; /* Or a fixed height like 40px, adjust as needed */
+  display: flex; /* Make it a flex container to align content if needed */
+  align-items: center; /* Center content vertically */
 }
 
 .nav-item:hover {
-  color: #1d4ed8;  /* deeper blue on hover */
-  transform: scale(1.05);
+  background-color: #34495e;
+}
+
+/* Dropdown Styles */
+/* By default, hide both dropdowns */
+.category-dropdown{
+  display: none; /* Hidden by default */
+  position: absolute;
+  /* Top should be 100% of the parent nav-item's height.
+     If there's still a gap, a small negative margin-top can pull it up.
+     Let's try 100% first as it's the standard. */
+  top: 100%; /* Positions it directly below the parent .nav-item */
+  left: 0;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1001; /* Ensure it appears above other content */
+  border-radius: 5px;
+  padding: 0;
+  list-style: none;
+  /* Add a small top border radius to visually connect it */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* When the parent category-item is hovered, show its dropdown */
+.category-item:hover .category-dropdown {
+  display: block;
+}
+
+
+/* Modified Dropdown Styles */
+.login-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%; /* Keep this to position below the parent */
+  left: 0;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  border-radius: 5px;
+  padding: 0;
+  list-style: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  /* Add margin-top to pull it closer to the parent */
+  margin-top: -5px; /* This reduces the gap */
+}
+
+/* Add a pseudo-element to create a hoverable bridge between nav-item and dropdown */
+.login-item::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; /* Adjust this to match the negative margin-top of dropdown */
+  left: 0;
+  width: 100%;
+  height: 10px; /* Creates a hoverable zone */
+  background: transparent;
+}
+
+/* Fixed selector - this is what was preventing the dropdown from appearing */
+.login-item:hover::after, 
+.login-item:hover .login-dropdown {
+  display: block;
+}
+
+
+.category-option,
+.login-option {
+  color: #2c3e50;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.category-option:hover,
+.login-option:hover {
+  background-color: #ecf0f1;
 }
 
 .nav-actions {
@@ -78,254 +152,307 @@ body {
 }
 
 .search-input {
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
-  border: 1px solid #93c5fd;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 25px;
+  width: 250px;
   outline: none;
-}
-
-.search-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  font-size: 0.9rem;
 }
 
 .nav-action-item {
-  color: #1e293b;  /* dark text for better readability */
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.3s, transform 0.2s;
+  color: white;
+  padding: 0.5rem 1rem;
+  background-color: #e74c3c;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .nav-action-item:hover {
-  color: #1d4ed8;
-  transform: scale(1.05);
+  background-color: #c0392b;
 }
 
-/* Popular Products Section */
-.products-section {
-  margin-top: 2rem;
+/* NEW: Hero Section Styles */
+.hero-section {
+  position: relative;
+  height: 500px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.section-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #1e293b;
+.floating-text {
+  position: absolute;
+  left: 5%; /* move to left side */
+  top: 50%; /* vertically center */
+  transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: left;
+  color: #fff;
+  max-width: 400px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
   margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.8rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #ffeb3b; /* make subtitle pop with yellow */
+  margin-bottom: 1rem;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-section {
+  position: relative;
+  height: calc(100vh - 80px); /* Adjust depending on navbar height */
+  overflow: hidden;
+}
+
+.scrolling-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scrolling-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.scrolling-image.active {
+  opacity: 1;
+}
+
+/* Products Section */
+.products-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  padding: 3rem .7rem;
+  margin: .2rem 0;
+  border-radius: 3px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   text-align: center;
 }
+.products-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-/* Horizontal row for products */
+.arrow-btn {
+  background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  margin: 0 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.arrow-btn:hover {
+  background: linear-gradient(135deg, #45B7D1 0%, #4ECDC4 100%);
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
 .products-row {
   display: flex;
-  gap: 1.8rem;
-  overflow: hidden;
-  justify-content: center;
   
+  justify-content: flex-start;
+  /* Removed overflow-x: auto and scroll-behavior: smooth as we are controlling scroll with JS */
+  padding: 1rem 0;
+  overflow: hidden; /* Hide internal scrollbar */
 }
 
-/* Product cards styling */
+.products-row::-webkit-scrollbar {
+  display: none; /* Optional: hide scrollbar for cleaner look */
+}
+
 .product-card {
-  background: #f9fafb;
-  padding: 1.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   min-width: 200px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  flex-shrink: 0;
+  max-width: 200px;
+  flex: 0 0 auto;
+  margin-right: 2rem; /* Matches the gap */
+}
+
+.product-card:last-child {
+    margin-right: 0; /* No margin on the last card */
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Product image styling */
 .product-img {
   width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin-bottom: 0.75rem;
-  max-height: 180px;
-  object-fit: contain;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
 }
 
-/* Product name styling */
-.product-name {
-  font-size: 1.1rem;
-  color: #334155;
-  font-weight: 600;
-}
-
-/* See More button container */
-.see-more-container {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* See More button style */
-.see-more-btn {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 0.65rem 1.8rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.see-more-btn:hover {
-  background-color: #1e40af;
-}
+/* Keep other product text styles same as before */
 
 
 /* Review Section */
 .review-section {
-  margin-top: 3rem;
-  padding: 2rem;
-  background-color: #f3f4f6; /* light gray background */
+  padding: 3rem 2rem;
+  background-color: #ecf0f1;
+  margin: 2rem 0;
   border-radius: 10px;
 }
 
 .reviews-container {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .review-card {
-  background-color: white;
-  padding: 1.2rem 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  max-width: 280px;
-  flex: 1 1 280px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .review-text {
   font-style: italic;
-  color: #374151; /* dark gray */
+  font-size: 1.1rem;
+  color: #2c3e50;
   margin-bottom: 1rem;
-  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .review-author {
-  font-weight: 600;
-  color: #1f2937; /* darker gray */
-  text-align: right;
-  font-size: 0.9rem;
+  font-weight: bold;
+  color: #667eea;
 }
 
-
+/* Footer */
 .site-footer {
-  background-color: #3b82f6; /* match your header blue */
-  color: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-top: 2rem;
+  background-color: #2c3e50;
+  color: white;
+  padding: 2rem;
   text-align: center;
+  margin-top: 2rem;
 }
 
 .footer-links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 2rem;
   justify-content: center;
-  margin-bottom: 0.8rem;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .footer-link {
-  font-size: 0.95rem;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 
 .footer-link:hover {
-  color: #dbeafe; /* lighter shade on hover */
+  color: #667eea;
 }
 
 .footer-copy {
-  font-size: 0.85rem;
+  margin-top: 1rem;
   opacity: 0.8;
 }
 
-
-.category-item {
-  position: relative;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .hero-description {
+    font-size: 1rem;
+  }
+  
+  .floating-text {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  
+  .navbar {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .nav-list {
+    margin-bottom: 1rem;
+  }
+  
+  .nav-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .search-input {
+    width: 200px;
+  }
+  
+  .scrolling-image {
+    height: 150px;
+    width: 250px;
+  }
+  
+  .scrolling-container {
+    height: 150px;
+  }
 }
-
-.category-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #80bd8f; /* same as navbar bg */
-  padding: 0.5rem 0;
-  list-style: none;
-  display: none;
-  flex-direction: column;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  min-width: 180px;
-  z-index: 100;
-}
-
-.login-item {
-  position: relative;
-}
-
-.login-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #60a5fa; /* same as navbar */
-  padding: 0.5rem 0;
-  list-style: none;
-  display: none;
-  flex-direction: column;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  min-width: 160px;
-  z-index: 100;
-}
-
-.login-option {
-  padding: 0.5rem 1rem;
-  color: #1e293b;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.login-option:hover {
-  background-color: #3b82f6;
-  color: #fff;
-}
-
-/* Show dropdown on hover */
-.login-item:hover .login-dropdown {
-  display: flex;
-}
-
-
-.category-option {
-  padding: 0.5rem 1rem;
-  color: #1e293b;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.category-option:hover {
-  background-color: #7c838dd0; /* deeper blue on hover */
-  color: #fff;
-}
-
-/* Show dropdown on hover */
-.category-item:hover .category-dropdown {
-  display: flex;
-}
-

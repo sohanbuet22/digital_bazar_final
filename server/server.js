@@ -166,6 +166,73 @@ app.post("/orderItems", async (req, res) => {
 
 });
 
+// app.get("/cartItems/:id", async (req, res) => {
+//   try {
+//     const customer_id = req.params.id;
+//     console.log(customer_id);
+//     const cartResult = await db.query(
+//       "select cart_id from customer where customer_id=$1",
+//       [customer_id]
+//     );
+//     if (cartResult.rows.length == 0) {
+//       return res.status(400).json({ message: "Cart not found for this customer" });
+//     }
+//     const cart_id = cartResult.rows[0].cart_id;
+
+//     const results = await db.query(
+//       "SELECT * FROM product p join sell s on(p.product_id=s.product_id) WHERE p.product_id IN (SELECT product_id FROM cart_item WHERE cart_id = $1)",
+//       [cart_id]
+//     );
+//     res.json({
+//       status: "success",
+//       items: results.rows,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ status: "error", message: "Server error" });
+//   }
+// });
+
+// app.get("/CategoryPage/: catagory", async(req, res)=>{
+//   try{
+
+//     const category_name = req.params.category;
+//     console.log(category_name);
+//     const category_result = await db.query(
+//       "select product_id from")
+
+//   }catch(err) {
+//     console.error(err);
+//     res.status(500).json({status:"error",message: "Server error"});
+//   }
+// });
+
+
+app.get('/categoryProducts/:categoryName', async (req, res) => {
+  const categoryName = req.params.categoryName;
+
+  try {
+    const results = await db.query(
+      `SELECT * 
+       FROM product p 
+       JOIN category c ON p.category_id = c.category_id 
+       join sell s on p.product_id=s.product_id
+       join image i on i.product_id=p.product_id
+       WHERE c.category_name = $1`,
+      [categoryName]
+    );
+
+    console.log(results.rows);
+    res.json({
+      status: "success",
+      products: results.rows,
+    });
+  } catch (err) {
+    console.error("Database error:", err);
+    res.status(500).json({ status: "error", message: "Database query failed" });
+  }
+});
+
 
 
 
