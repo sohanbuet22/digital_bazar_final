@@ -26,6 +26,7 @@ const CustomerLogin = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials:"include",
         body: JSON.stringify(formData)
       });
 
@@ -33,12 +34,6 @@ const CustomerLogin = () => {
 
       if (res.ok) {
         console.log('Login Success:', data.customer);
-        // After successful login response from server:
-        const customerId =data.customer.customer_id; // example
-
-        // Save to localStorage as a string
-        localStorage.setItem("customerId", customerId);
-
         navigate('/');
       } else {
         setError(data.message || 'Login failed');

@@ -7,14 +7,15 @@ const CartProducts = () => {
   const [cartItems, setCartItems] = useState([]);
   const [grandTotal, setGrandTotal] = useState(0);
   const navigate = useNavigate();
-  const customerId = localStorage.getItem("customerId");
 
+  // Fetch cart items from backend
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/cartItems/${customerId}`);
+        const res = await axios.get("http://localhost:4000/cartItems", {
+          withCredentials: true, 
+        });
 
-        // Set default quantity 1 for each item (if not present)
         const itemsWithQuantity = res.data.items.map(item => ({
           ...item,
           quantity: 1,
@@ -23,15 +24,16 @@ const CartProducts = () => {
         setCartItems(itemsWithQuantity);
       } catch (error) {
         console.error("Error fetching cart items:", error);
+        if (error.response?.status === 401) {
+          navigate("/CustomerLogin"); 
+        }
       }
     };
 
-    if (customerId) {
-      fetchCartItems();
-    }
-  }, [customerId]);
+    fetchCartItems();
+  }, []);
 
-  // Calculate grand total whenever cartItems or their quantities change
+  // Recalculate total whenever cart items or quantity changes
   useEffect(() => {
     const total = cartItems.reduce(
       (sum, item) => sum + item.selling_price * item.quantity,
@@ -40,6 +42,7 @@ const CartProducts = () => {
     setGrandTotal(total);
   }, [cartItems]);
 
+  // Quantity change handler
   const handleQuantityChange = (productId, delta) => {
     setCartItems(prevItems =>
       prevItems.map(item =>
@@ -50,11 +53,17 @@ const CartProducts = () => {
     );
   };
 
+  // Delete cart item
   const handleDelete = async (productId) => {
     try {
       await axios.delete("http://localhost:4000/api/v1/cart/delete", {
-        data: { product_id: productId, customer_id: customerId },
+        data: { product_id: productId }, // No need for customer_id if token is used
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json"
+        }
       });
+
       setCartItems(prev => prev.filter(item => item.product_id !== productId));
     } catch (err) {
       console.error("Failed to delete item:", err);
