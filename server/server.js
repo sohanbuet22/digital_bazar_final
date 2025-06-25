@@ -37,11 +37,13 @@ app.post("/login", async (req, res) => {
     if(result.rows.length<=0){
      return res.status(401).json({ message: "Invalid email or password" });
     }
-    const tokenData={
+    let tokenData={
       customer_id:result.rows[0].customer_id
     };
+    // const newTokenData == append role here and pass it into jwt 
 
-    const token=await jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn:'1d'});
+    const secretkey = process.env.JWT_SECRET_KEY;
+    const token = jwt.sign(tokenData, secretkey, {expiresIn:'1d'});
 
      return res
       .cookie("token", token, {
@@ -51,7 +53,8 @@ app.post("/login", async (req, res) => {
       })
       .status(200)
       .json({
-        customer: result.rows[0]
+        customer: result.rows[0],
+        token: token
       });
 
   } catch (err) {
@@ -206,6 +209,31 @@ app.get("/api/v1/paymentMethods", async (req, res) => {
 
 app.post("/orderItems", async (req, res) => {
 
+});
+
+app.get('/categoryProducts/:categoryName', async (req, res) => {
+  const categoryName = req.params.categoryName;
+
+  try {
+    const results = await db.query(
+      `SELECT * 
+       FROM product p 
+       JOIN category c ON p.category_id = c.category_id 
+       join sell s on p.product_id=s.product_id
+       join image i on i.product_id=p.product_id
+       WHERE c.category_name = $1`,
+      [categoryName]
+    );
+
+    console.log(results.rows);
+    res.json({
+      status: "success",
+      products: results.rows,
+    });
+  } catch (err) {
+    console.error("Database error:", err);
+    res.status(500).json({ status: "error", message: "Database query failed" });
+  }
 });
 
 

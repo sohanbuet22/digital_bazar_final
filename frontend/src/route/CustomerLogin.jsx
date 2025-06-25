@@ -31,6 +31,9 @@ const CustomerLogin = () => {
       });
 
       const data = await res.json();
+      console.log(data.token);
+      localStorage.setItem('token', data.token);
+      console.log(localStorage.getItem('token'));
 
       if (res.ok) {
         console.log('Login Success:', data.customer);
