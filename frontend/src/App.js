@@ -9,6 +9,7 @@ import CartProducts from './route/CartProducts';
 import CategoryPage from './route/CategoryPage';
 import SellerAuth from './route/SellerLogin';
 import WishlistPage from './route/WishList';
+import SellerDashboard from './route/SellerPage';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/CategoryPage/:categoryName" element={<CategoryPage/>}/>
           <Route path="/SellerLogin" element ={<SellerAuth/>}/>
           <Route path="/WishList" element ={<WishlistPage/>}/>
+          <Route path="/SellerPage" element ={<SellerDashboard/>}/>
         </Routes>
       </Router>
     </div>
