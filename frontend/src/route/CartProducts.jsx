@@ -40,6 +40,7 @@ const CartProducts = () => {
       0
     );
     setGrandTotal(total);
+    localStorage.setItem("grandTotal",total);
   }, [cartItems]);
 
   // Quantity change handler

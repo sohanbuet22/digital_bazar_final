@@ -7,6 +7,7 @@ import LoginOption from './route/LoginOption'
 import ProductDetails from './route/ProductDetails'
 import CartProducts from './route/CartProducts';
 import CategoryPage from './route/CategoryPage';
+import CheckoutPage from './route/CheckoutPage';
 const App = () => {
   return (
     <div>
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/LoginOption" element={<LoginOption/>}/>
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/CartItems" element={<CartProducts/>}/>
+          <Route path='/checkout' element={<CheckoutPage/>}/>
           <Route path="/CategoryPage/:categoryName" element={<CategoryPage/>}/>
         </Routes>
       </Router>
